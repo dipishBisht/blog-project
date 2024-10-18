@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken")
 
 const masterPassword = process.env["MASTER_PASSWORD"];
 const SECRET_TOKEN = process.env["SECRET_TOKEN"];
+const PORT = process.env["PORT"] || 3000;
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -15,14 +16,14 @@ app.use((req, res, next) => {
   const { session } = req.cookies;
 
   if (session) {
-      try {
-          const decoded = jwt.verify(session, SECRET_TOKEN);
-          req.authenticated = decoded.USER === "USER";
-      } catch (err) {
-          req.authenticated = false;
-      }
-  } else {
+    try {
+      const decoded = jwt.verify(session, SECRET_TOKEN);
+      req.authenticated = decoded.USER === "USER";
+    } catch (err) {
       req.authenticated = false;
+    }
+  } else {
+    req.authenticated = false;
   }
 
   next();
@@ -109,6 +110,6 @@ app.get('/logout', (req, res) => {
   res.render('logout')
 });
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log("Server running at 3000!");
 });
