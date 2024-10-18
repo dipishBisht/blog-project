@@ -48,14 +48,10 @@ app.get("/create-blog", (req, res) => {
 });
 
 app.post("/create-blog", (req, res) => {
-  const { title, content, password } = req.body;
+  const { title, content } = req.body;
   const jsonBlog = fs.readFileSync("./data/blogs.json");
   const blogs = JSON.parse(jsonBlog);
   let slug = "/blog/" + title.trim().replaceAll(/\s+/g, "-").toLowerCase();
-
-  if (password != PASSWORD) {
-    res.send("You are not authorized!");
-  }
 
   let isUnique = true;
   for (let blog of blogs) {
